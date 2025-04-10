@@ -1,6 +1,7 @@
 package com.example.sem3b_lab_3.artista;
 
 
+import com.example.sem3b_lab_3.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class ArtistaController {
         if (foundArtista.isPresent()) {
             return ResponseEntity.ok(foundArtista.get());
         }
-        return null;
+        throw new ResourceNotFoundException("Artista con id " + id + " no encontrado");
     }
 
 }
