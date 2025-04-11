@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,6 +25,18 @@ public class ArtistaController {
         }
 
         throw new ResourceConflictException("Artista con el nombre " + artista.getUsername() + " ya existe");
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<Artista> updateArtista(@PathVariable Long id, @RequestBody Artista artista) {
+        Optional<Artista> foundArtistaById = artistaRepository.findById(id);
+
+        if (foundArtistaById.isPresent()) {
+            foundArtistaById.get().setUsername(artista.getUsername());
+            return ResponseEntity.ok(artistaRepository.save(foundArtistaById.get()));
+        }
+
+        throw new ResourceNotFoundException("Artista con id " + id + " no encontrado");
     }
 
     @GetMapping("/{id}")
